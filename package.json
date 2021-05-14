@@ -1,0 +1,20 @@
+{
+  "name": "r-rubi",
+  "version": "1.0.0",
+  "description": "Restaruant api",
+  "main": "index.js",
+  "repository": "https://github.com/wmartzh/r-rubi",
+  "author": "wmartzh <wmartzh@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "server": "nodemon ./config/server.js"
+  },
+  "dependencies": {
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "pg": "^8.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
