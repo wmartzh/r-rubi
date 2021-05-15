@@ -1,27 +1,32 @@
 const { Pool, Client } = require("pg");
-
-const pool = new Pool({
+const config = {
   user: process.env.DATABASE_USER,
   host: process.env.DATABASE_HOST,
   database: process.env.DATABASE_NAME,
   password: process.env.DATABASE_PASS,
   port: process.env.DATABASE_PORT,
-});
+};
+const pool = new Pool(config);
 
-pool.query("SELECT NOW()", (err, res) => {
-  if (err) {
-    console.error(err);
-  } else if (res) {
-    console.log("Database was connected succesfully");
+const query = async (query, values) => {
+  const client = await pool.connect();
+  let res;
+  try {
+    await client.query("BEGIN");
+    try {
+      res = await client.query(query, values);
+      await client.query("COMMIT");
+    } catch (err) {
+      console.log("🚀 ~ file: database.js ~ line 20 ~ query ~ err", err);
+      await client.query("ROLLBACK");
+      throw err;
+    }
+  } finally {
+    client.release();
   }
-  pool.end();
-});
-const client = new Client({
-  user: process.env.DATABASE_USER,
-  host: process.env.DATABASE_HOST,
-  database: process.env.DATABASE_NAME,
-  password: process.env.DATABASE_PASS,
-  port: process.env.DATABASE_PORT,
-});
+  return res;
+};
 
-module.exports = client;
+module.exports = {
+  query,
+};
