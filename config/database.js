@@ -1,4 +1,4 @@
-const { Pool } = require("pg");
+const { Pool, Client } = require("pg");
 
 const pool = new Pool({
   user: process.env.DATABASE_USER,
@@ -16,10 +16,12 @@ pool.query("SELECT NOW()", (err, res) => {
   }
   pool.end();
 });
+const client = new Client({
+  user: process.env.DATABASE_USER,
+  host: process.env.DATABASE_HOST,
+  database: process.env.DATABASE_NAME,
+  password: process.env.DATABASE_PASS,
+  port: process.env.DATABASE_PORT,
+});
 
-module.exports = {
-  query: (query, params, callback) => {
-    return pool.query(query, params, callback);
-  },
-  connect: () => pool.connect(),
-};
+module.exports = client;

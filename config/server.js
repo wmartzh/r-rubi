@@ -6,14 +6,26 @@ const app = express();
 
 const port = process.env.SERVER_PORT || 3000;
 
-app.get("/", (req, res) => {
+const logger = (req, res, next) => {
+  console.info(`${req.method} ${req.hostname}  ${req.url}`);
+  next();
+};
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+app.use(logger);
+app.get("/v1", (req, res) => {
   res.json({
     name: "CoolAPI",
     description: "API for a cool app",
     version: "1.0.0",
   });
 });
-app.use(router);
+app.use("/v1", router);
 
 app.listen(port, () => {
   console.log(`App listening at 127.0.0.1:${port}`);
