@@ -1,32 +1,31 @@
-const { Pool, Client } = require("pg");
+const { Sequelize } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 const config = {
-  user: process.env.DATABASE_USER,
+  dialect: "postgres",
+  username: process.env.DATABASE_USER,
   host: process.env.DATABASE_HOST,
   database: process.env.DATABASE_NAME,
   password: process.env.DATABASE_PASS,
   port: process.env.DATABASE_PORT,
 };
-const pool = new Pool(config);
 
-const query = async (query, values) => {
-  const client = await pool.connect();
-  let res;
-  try {
-    await client.query("BEGIN");
-    try {
-      res = await client.query(query, values);
-      await client.query("COMMIT");
-    } catch (err) {
-      console.log("🚀 ~ file: database.js ~ line 20 ~ query ~ err", err);
-      await client.query("ROLLBACK");
-      throw err;
-    }
-  } finally {
-    client.release();
+const sequelize = new Sequelize(config);
+const db = {};
+const models = path.join(__dirname, "database"); // path to a models' folder
+
+fs.readdirSync(models)
+  .filter(function (file) {
+    return file.indexOf(".") !== 0 && file.slice(-3) === ".js";
+  })
+  .forEach(function (file) {
+    var model = sequelize["import"](path.join(models, file));
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach(function (modelName) {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
   }
-  return res;
-};
-
-module.exports = {
-  query,
-};
+});
+module.exports = sequelize;

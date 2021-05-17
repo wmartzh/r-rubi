@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
-const userDatabase = require("../database/user");
+const database = require('../config/database')
+const {User} = require("../database/models");
 
 const register = async (req, res) => {
   try {
@@ -22,15 +23,14 @@ const register = async (req, res) => {
     const hash = bcrypt.hashSync(data.password, salt);
 
     //store data
-    let result = await userDatabase.createUser({
+    let newUser = await User.create({
       username: data.username,
       email: data.email,
       password: hash,
+      
     });
-    console.log(
-      "🚀 ~ file: authController.js ~ line 30 ~ register ~ result",
-      result
-    );
+    console.log("🚀 ~ file: authController.js ~ line 31 ~ register ~ newUser", newUser)
+    
 
     if (result) {
       res.status(201).json({
