@@ -7,7 +7,12 @@ const app = express();
 const port = process.env.SERVER_PORT || 3000;
 
 const logger = (req, res, next) => {
-  console.info(`${req.method} ${req.hostname}  ${req.url}`);
+  // console.log("🚀 -> logger -> res", res);
+  res.on("finish", () => {
+    console.log(
+      `${req.method} ${req.hostname}${req.url} [status:${res.statusCode}]'`
+    );
+  });
   next();
 };
 app.use(express.json());
