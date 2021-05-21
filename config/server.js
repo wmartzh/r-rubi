@@ -1,9 +1,9 @@
 require("dotenv").config({ path: "./.env" });
 const express = require("express");
-const database = require("./database.js");
+
 const router = require("../router");
 const app = express();
-const migrations = require("../database/migrations");
+
 const port = process.env.SERVER_PORT || 3000;
 
 const logger = (req, res, next) => {
@@ -28,14 +28,5 @@ app.get("/v1", (req, res) => {
 app.use("/v1", router);
 // migrations.migrate();
 app.listen(port, () => {
-  database
-    .authenticate()
-    .then(() => {
-      console.log("Connection has been established successfully.");
-    })
-    .catch((err) => {
-      console.error("Unable to connect to the database:", err);
-    });
-
   console.log(`App listening at 127.0.0.1:${port}`);
 });

@@ -11,6 +11,7 @@
     "migrate": "node ./database/migrations.js migrate"
   },
   "dependencies": {
+    "@prisma/client": "^2.23.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "dotenv": "^9.0.2",
@@ -23,6 +24,7 @@
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "prisma": "^2.23.0"
   }
 }

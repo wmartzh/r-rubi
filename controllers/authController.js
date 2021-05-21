@@ -1,7 +1,8 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
-const database = require('../config/database')
-const {User} = require("../database/models");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 const register = async (req, res) => {
   try {
@@ -23,26 +24,24 @@ const register = async (req, res) => {
     const hash = bcrypt.hashSync(data.password, salt);
 
     //store data
-    let newUser = await User.create({
-      username: data.username,
-      email: data.email,
-      password: hash,
-      
+    await prisma.user.create({
+      data: {
+        username: data.username,
+        email: data.email,
+        password: hash,
+      },
     });
-    console.log("🚀 ~ file: authController.js ~ line 31 ~ register ~ newUser", newUser)
-    
 
-    if (result) {
-      res.status(201).json({
-        message: "User was created successfully",
-      });
-    }
+    res.status(201).json({
+      message: "User was created successfully",
+    });
   } catch (error) {
+    // console.log("🚀 -> register -> error", error.code);
     if (error.details) {
       res.status(400).json(error);
-    } else if (error.code && error.code === "23505") {
+    } else if (error.code && error.code === "P2002") {
       res.status(400).json({
-        detail: "email its already taken",
+        detail: "email is already taken",
       });
     } else {
       res.status(500).json({
