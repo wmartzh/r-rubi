@@ -85,6 +85,7 @@ const login = async (req, res) => {
         {
           email: user.email,
           created: DateTime.now().toISO(),
+          client: req.ip,
         },
         process.env.PRIVATE_KEY,
         { expiresIn: process.env.TOKEN_EXPIRES }
