@@ -3,7 +3,7 @@ const express = require("express");
 
 const router = require("../router");
 const app = express();
-
+const cors = require("cors");
 const port = process.env.SERVER_PORT || 3000;
 
 const logger = (req, res, next) => {
@@ -21,7 +21,7 @@ app.use(
     extended: true,
   })
 );
-
+app.use(cors());
 app.use(logger);
 app.get("/v1", (req, res) => {
   res.json({
