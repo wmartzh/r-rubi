@@ -1,17 +1,26 @@
 # r-rubi
 > This a sandbox project to make a food orders API
 
-## Instalation
+## Dependencies Required
 
-#### NPM
+| Dependecies      | Description | Version|
+| ----------- | ----------- | ----------- |
+| Prisma      | ORM       |2.23.0
+|@prisma/client| ORM Client | 2.23.0
+  
+
+## Instalation
+NPM
 
     npm install
-
-#### Yarn
+Yarn
 
     yarn install
+### Run Migrations
+    
+    prisma migrate dev --name init 
 
-### ⚡ Run
+### ⚡ Run server
 
     npm run server 
 
