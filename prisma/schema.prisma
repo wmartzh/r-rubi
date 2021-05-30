@@ -14,6 +14,13 @@ generator client {
 enum Role {
   user
   admin
+  client
+}
+
+enum OrderState {
+  pending
+  inProcess
+  done
 }
 
 model User {
@@ -26,4 +33,40 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
 
+}
+
+model Product {
+  id          Int       @id @default(autoincrement())
+  code        String
+  name        String
+  description String?
+  price       Decimal
+  orders      Order[]
+  receipt     Receipt[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+
+}
+
+model Order {
+  id         Int        @id @default(autoincrement())
+  number     String
+  state      OrderState @default(pending)
+  clientName String
+  Product    Product?   @relation(fields: [productId], references: [id])
+  productId  Int?
+  Receipt    Receipt[]
+  total      Decimal
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now())
+}
+
+model Receipt {
+  id        Int      @id @default(autoincrement())
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId Int?
+  orderId   Int?
+  Order     Order?   @relation(fields: [orderId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

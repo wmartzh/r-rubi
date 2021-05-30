@@ -105,3 +105,5 @@ dist
 
 #locks
 yarn.lock
+
+prisma/migrations/
