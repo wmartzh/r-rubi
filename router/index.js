@@ -7,6 +7,9 @@ const authMiddleware = require("../middlewares/authMiddleware");
 router.use("/auth", auth);
 
 router.use(authMiddleware.auth);
+
+
+
 router.use("/users", users);
 router.use("/products", products);
 router.use("/orders", users);

@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { required } = require("joi");
 const prisma = new PrismaClient();
 const Joi = require("joi");
 const { DateTime } = require("luxon");

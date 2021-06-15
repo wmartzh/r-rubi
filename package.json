@@ -20,7 +20,9 @@
     "joi": "^17.4.0",
     "jose": "^3.12.0",
     "jsonwebtoken": "^8.5.1",
-    "luxon": "^1.27.0"
+    "luxon": "^1.27.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",

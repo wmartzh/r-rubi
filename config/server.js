@@ -1,11 +1,13 @@
 require("dotenv").config({ path: "./.env" });
 const express = require("express");
-
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const router = require("../router");
 const app = express();
 const cors = require("cors");
 const port = process.env.SERVER_PORT || 3000;
 
+const swaggerDocument = require("../swagger.json");
 const logger = (req, res, next) => {
   // console.log("🚀 -> logger -> res", res);
   res.on("finish", () => {
@@ -21,6 +23,7 @@ app.use(
     extended: true,
   })
 );
+app.use("/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors());
 app.use(logger);
 app.get("/v1", (req, res) => {
@@ -30,6 +33,7 @@ app.get("/v1", (req, res) => {
     version: "1.0.0",
   });
 });
+
 app.use("/v1", router);
 // migrations.migrate();
 app.listen(port, () => {
