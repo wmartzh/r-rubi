@@ -1,13 +1,15 @@
 require("dotenv").config({ path: "./.env" });
 const express = require("express");
-const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const router = require("../router");
 const app = express();
 const cors = require("cors");
+const swaggerDocument = require("../swagger.json");
+const helmet = require('helmet')
 const port = process.env.SERVER_PORT || 3000;
 
-const swaggerDocument = require("../swagger.json");
+
+
 const logger = (req, res, next) => {
   // console.log("🚀 -> logger -> res", res);
   res.on("finish", () => {
@@ -24,9 +26,15 @@ app.use(
   })
 );
 app.use("/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
 app.use(cors());
 app.use(logger);
+app.use(helmet())
+
+
 app.get("/v1", (req, res) => {
+
   res.json({
     name: "CoolAPI",
     description: "API for a cool app",

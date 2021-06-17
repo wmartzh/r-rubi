@@ -10,16 +10,18 @@ const auth = async (req, res, next) => {
 
     let tk = authHeader.split(" ")[1];
 
-    let decoded = await jwt.verify(tk, process.env.PRIVATE_KEY);
+    let payload = await jwt.verify(tk, process.env.PRIVATE_KEY);
+    if (payload.type !== "access") {
+      throw { code: 400, message: "Wrong token type" };
+    }
 
     let user = await prisma.user.findFirst({
       where: {
         email: {
-          equals: decoded.email,
+          equals: payload.email,
         },
       },
     });
-    let exptk = new Date(decoded.exp);
 
     if (user == null) {
       throw { code: 401, message: "Unauthorized user" };
@@ -32,6 +34,7 @@ const auth = async (req, res, next) => {
     } else if (error.TokenExpiredError) {
       res.status(400).json("Token provided is expired");
     } else {
+      console.log(error);
       res.status(400).json("Token provided is invalid");
     }
   }

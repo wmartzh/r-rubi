@@ -2,6 +2,11 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const Joi = require("joi");
 
+
+const createOrderSchema = Joi.object({
+
+})
+
 const getAll = async (req, res) => {
   try {
     let orders = await prisma.order.findMany();
@@ -19,7 +24,16 @@ const getAll = async (req, res) => {
     }
   }
 };
-const create = async (req, res) => {};
+const create = async (req, res) => {
+  try {
+      
+
+
+  } catch (error) {
+    
+  }
+};
 module.exports = {
   getAll,
+  create
 };
