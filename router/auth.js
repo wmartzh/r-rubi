@@ -17,7 +17,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 router.post("/register", authController.register);
 router.post("/login", authController.login);
 
-router.use(authMiddleware.auth);
+// router.use(authMiddleware.auth);
 router.post("/refreshToken", authController.refreshToken);
 
 module.exports = router;

@@ -77,7 +77,7 @@ const login = async (req, res) => {
       });
       return;
     }
-    // match passowd
+    // match password
     let matchPassword = await bcrypt.compare(data.password, user.password);
 
     if (matchPassword) {
@@ -116,19 +116,20 @@ const refreshToken = async (req, res) => {
   });
   try {
     const data = await refreshTokenSchema.validateAsync(req.body);
-    console.log("🚀 -> refreshToken -> data", data);
+
     const payload = jwt.verify(data.refreshToken, process.env.PRIVATE_KEY);
+    console.log("🚀 -> refreshToken -> payload", payload);
     if (payload.type !== "refresh") {
       throw { code: 400, message: "Wrong token type provided" };
     }
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        id: {
-          equals: data.userId,
-        },
+        id: Number(payload.userId),
       },
     });
+    console.log("🚀 -> refreshToken -> user", user);
     const key = genKey(user.id, user.password);
+    console.log("🚀 -> refreshToken -> key", key);
     if (key != payload.key) {
       throw { code: 400, message: "Unauthorized, password wasChanged" };
     }

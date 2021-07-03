@@ -17,6 +17,7 @@ const productUpdate = Joi.object({
 const getAll = async (req, res) => {
   try {
     let products = await prisma.product.findMany();
+    console.log("🚀 -> getAll -> products", products);
     if (products.length == 0) {
       throw { Reg404: "There is not registers" };
     }

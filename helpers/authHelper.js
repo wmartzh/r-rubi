@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+
 const genKey = (id, password) => {
   const raw = id + password;
   return crypto
@@ -49,7 +50,6 @@ class TokenGenerator {
       role: this.role,
       type: "refresh",
       key: key,
-      password: this.password,
     };
     const accessToken = jwt.sign(payload, process.env.PRIVATE_KEY);
 
